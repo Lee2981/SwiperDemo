@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <!-- Link Swiper's CSS -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/swiper@8/swiper-bundle.css"
+    />
+    <script src="https://unpkg.com/swiper@8/swiper-bundle.js"></script>
+    <!-- 引入 jQuery.js -->
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.4/jquery.js"></script>
+    <!-- Demo styles -->
+    <style>
+      html,
+      body {
+        position: relative;
+        height: 100%;
+      }
+
+      body {
+        background: #eee;
+        font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+        font-size: 14px;
+        color: #000;
+        margin: 0;
+        padding: 0;
+      }
+
+      .swiper {
+        width: 45%;
+        padding-top: 50px;
+        padding-bottom: 50px;
+      }
+
+      .swiper-slide {
+        background-position: center;
+        background-size: cover;
+        width: 300px;
+        height: 300px;
+      }
+
+      .swiper-slide img {
+        display: block;
+        width: 100%;
+      }
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Swiper -->
+    <div class="swiper mySwiper">
+      <div class="swiper-wrapper" id="mySwiper"></div>
+      <div class="swiper-pagination"></div>
+    </div>
+  </body>
+  <!-- Initialize Swiper -->
+  <script>
+    $(document).ready(function () {
+      showList();
+      var swiper = new Swiper(".mySwiper", {
+        loop: true,
+        effect: "coverflow",
+        grabCursor: true,
+        centeredSlides: true,
+        slidesPerView: "auto",
+        coverflowEffect: {
+          rotate: 10,
+          stretch: 10,
+          depth: 200,
+          modifier: 2,
+          slideShadows: false,
+        },
+        pagination: {
+          el: ".swiper-pagination",
+        },
+      });
+    });
+
+    //获取数据
+    var res;
+    function getList() {
+      $.ajax({
+        url: "https://liu.zzgoodqc.cn/banner",
+        type: "get",
+        dataType: "json",
+        async: false,
+        success: function (data) {
+          if (data.code == 200) {
+            res = data.data;
+          } else {
+            alert(data.msg);
+          }
+        },
+      });
+    }
+    //渲染数据
+    function showList() {
+      getList();
+      let html = "";
+      $(res).each((index, item) => {
+        html += `<div class="swiper-slide"><img src="${item.img}"></div>`;
+      });
+      $("#mySwiper").html(html);
+    }
+  </script>
+</html>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+  }
+</style>

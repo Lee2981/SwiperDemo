@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <!-- Link Swiper's CSS -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/swiper@8/swiper-bundle.css"
+    />
+    <script src="https://unpkg.com/swiper@8/swiper-bundle.js"></script>
+    <!-- 引入 jQuery.js -->
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.4/jquery.js"></script>
+    <!-- Demo styles -->
+    <style>
+      html,
+      body {
+        position: relative;
+        height: 100%;
+      }
+
+      body {
+        background: #eee;
+        font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+        font-size: 14px;
+        color: #000;
+        margin: 0;
+        padding: 0;
+      }
+
+      .swiper {
+        width: 50%;
+        height: 50%;
+      }
+
+      .swiper-slide {
+        text-align: center;
+        font-size: 18px;
+        background: #fff;
+
+        /* Center slide text vertically */
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        -webkit-justify-content: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        -webkit-align-items: center;
+        align-items: center;
+      }
+
+      .swiper-slide img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .swiper {
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .swiper-pagination-bullets.swiper-pagination-horizontal {
+        position: absolute;
+        left: 730px;
+        width: 200px;
+        background-color: #ccc;
+      }
+      .swiper-pagination-bullet-active {
+        width: 70px;
+        border-radius: 8px;
+        background-color: red;
+      }
+      .myp {
+        position: absolute;
+        bottom: 10px;
+        left: 10px;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Swiper -->
+    <div class="swiper mySwiper">
+      <div class="swiper-wrapper" id="mySwiper"></div>
+      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-pagination"></div>
+    </div>
+  </body>
+  <!-- Initialize Swiper -->
+  <script>
+    $(document).ready(function () {
+      showList();
+      var swiper = new Swiper(".mySwiper", {
+        slidesPerView: 1,
+        spaceBetween: 30,
+        loop: true,
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+        },
+        autoplay: {
+          delay: 2500,
+          disableOnInteraction: false,
+        },
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+      });
+    });
+    //获取数据
+    var res;
+    function getList() {
+      $.ajax({
+        url: "https://liu.zzgoodqc.cn/banner",
+        type: "get",
+        dataType: "json",
+        async: false,
+        success: function (data) {
+          if (data.code == 200) {
+            res = data.data;
+          } else {
+            alert(data.msg);
+          }
+        },
+      });
+    }
+    //渲染数据
+    function showList() {
+      getList();
+      let html = "";
+      $(res).each((index, item) => {
+        html += `<div class="swiper-slide">
+            <img src="${item.img}">
+            <p class="myp">我们正青春${index}</p></div>`;
+      });
+      $("#mySwiper").html(html);
+    }
+  </script>
+</html>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+  }
+</style>

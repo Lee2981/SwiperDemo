@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Swiper demo</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1"
+    />
+    <!-- Link Swiper's CSS -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/swiper@8/swiper-bundle.css"
+    />
+    <script src="https://unpkg.com/swiper@8/swiper-bundle.js"></script>
+    <!-- 引入 jQuery.js -->
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.4/jquery.js"></script>
+    <style>
+      html,
+      body {
+        position: relative;
+        height: 100%;
+      }
+
+      body {
+        background: #eee;
+        font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+        font-size: 14px;
+        color: #000;
+        margin: 0;
+        padding: 0;
+      }
+
+      .swiper {
+        width: 100%;
+        height: 100%;
+      }
+
+      .swiper-slide {
+        text-align: center;
+        font-size: 18px;
+        background: #fff;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        -webkit-justify-content: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        -webkit-align-items: center;
+        align-items: center;
+      }
+
+      .swiper-slide img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .swiper-pagination-bullet {
+        width: 100px;
+        height: 60px;
+        color: #000;
+        background-color: white;
+        position: relative;
+        top: 0px;
+        line-height: 60px;
+        border-radius: 0%;
+      }
+      .myp {
+        position: absolute;
+        bottom: 10px;
+        left: 20px;
+        color: white;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Swiper -->
+    <div class="swiper mySwiper">
+      <div class="swiper-wrapper" id="mySwiper"></div>
+      <div class="swiper-pagination"></div>
+    </div>
+    <script>
+      $(document).ready(function () {
+        showList();
+        var swiper = new Swiper(".mySwiper", {
+          spaceBetween: 30,
+          centeredSlides: true,
+          direction: "vertical",
+          autoplay: {
+            delay: 2500,
+            disableOnInteraction: false,
+          },
+          pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+            renderBullet: function (index, className) {
+              let text = "";
+              switch (index) {
+                case 0:
+                  text = "第一张";
+                  break;
+                case 1:
+                  text = "第二张";
+                  break;
+                case 2:
+                  text = "第三张";
+                  break;
+                case 3:
+                  text = "第四张";
+                  break;
+                case 4:
+                  text = "第五张";
+                  break;
+                case 5:
+                  text = "第六张";
+                  break;
+              }
+              return '<div class="' + className + '">' + text + "</div>";
+            },
+          },
+        });
+        for (i = 0; i < swiper.pagination.bullets.length; i++) {
+          swiper.pagination.bullets[i].onmouseover = function () {
+            this.click();
+          };
+        }
+      });
+      //获取数据
+      var res;
+      function getList() {
+        $.ajax({
+          url: "https://liu.zzgoodqc.cn/banner",
+          type: "get",
+          dataType: "json",
+          async: false,
+          success: function (data) {
+            if (data.code == 200) {
+              res = data.data;
+            } else {
+              alert(data.msg);
+            }
+          },
+        });
+      }
+      //渲染数据
+      function showList() {
+        getList();
+        let html = "";
+        $(res).each((index, item) => {
+          html += `<div class="swiper-slide">
+            <img src="${item.img}">
+            <p class="myp">我是第${index}位逆风者</p>
+            </div>`;
+        });
+        $("#mySwiper").html(html);
+      }
+    </script>
+  </body>
+</html>
